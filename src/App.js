@@ -1,26 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css";
+import { Route, Switch } from "react-router-dom";
+import Navbar from "./component/Navbar/Navbar";
+import Home from "./component/Home/Home";
+import Details from "./component/Details/Details";
+import Cart from "./component/Cart/Cart";
+import SignUp from "./component/SignUp/SignUp";
+import SignIn from "./component/SignUp/SignIn";
+import CheckOut from "./component/CheckOut/CheckOut";
+import { AuthContextProvider } from "./component/SignUp/Auth";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <React.Fragment>
+            <AuthContextProvider>
+                <Navbar />
+                <Switch>
+                    <Route exact path="/" component={Home} />
+                    <Route path="/details/:key" component={Details} />
+                    <Route path="/cart" component={Cart} />
+                    <Route path="/signup" component={SignUp} />
+                    <Route path="/signin" component={SignIn} />
+                    <Route path="/checkout" component={CheckOut} />
+                </Switch>
+            </AuthContextProvider>
+        </React.Fragment>
+    );
 }
 
 export default App;
