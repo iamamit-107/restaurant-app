@@ -2,15 +2,15 @@ import React from "react";
 import logo from "../../logo2.png";
 import { useAuth } from "./Auth";
 import { useState } from "react";
-import { Redirect, useHistory } from "react-router-dom";
+import { Redirect, useHistory, withRouter } from "react-router-dom";
 
-const SignIn = () => {
+const SignIn = ({ history }) => {
     const auth = useAuth();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const onchangeHandler = e => {
+    const onchangeHandler = (e) => {
         const { name, value } = e.target;
         if (name === "email") {
             setEmail(value);
@@ -20,20 +20,20 @@ const SignIn = () => {
         }
     };
 
-    const signinUser = e => {
+    const signinUser = (e) => {
         e.preventDefault();
 
         auth.signin(email, password)
-            .then(res => {
+            .then((res) => {
                 if (res) {
                     if (res.user) {
                     }
                 }
-                alert("loged in");
+                history.push("/");
                 setPassword("");
                 setEmail("");
             })
-            .catch(err => {
+            .catch((err) => {
                 alert(err.message);
             });
     };
@@ -82,4 +82,4 @@ const SignIn = () => {
     );
 };
 
-export default SignIn;
+export default withRouter(SignIn);

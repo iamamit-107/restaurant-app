@@ -17,14 +17,14 @@ const Details = () => {
     };
     return (
         <MenuConsumer>
-            {value => {
+            {(value) => {
                 const {
                     name,
                     longDescription,
                     img,
                     price,
                     key,
-                    inCart
+                    inCart,
                 } = value.details;
                 return (
                     <div className="container py-5">

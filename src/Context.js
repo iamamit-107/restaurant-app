@@ -1,47 +1,64 @@
-import React, { createContext, useState, useEffect } from "react";
-import { FakeData } from "./fakeData";
+import React, { createContext, useState, useEffect, useContext } from "react";
 import {
     addToDatabaseCart,
-    getDatabaseCart
+    getDatabaseCart,
 } from "./utilities/databaseManager";
 
 const MenuContext = createContext();
-const MenuProvider = props => {
+const MenuProvider = (props) => {
     // const initialCart = JSON.parse(localStorage.getItem("cart")) || [];
 
+    const [allMenu, setAllMenu] = useState([]);
     const [menu, setMenu] = useState([]);
     const [filterd, setFiltered] = useState([]);
     const [details, setDetails] = useState([]);
     const [cartItem, setCartItems] = useState([]);
+    const [orderId, setOrderId] = useState([]);
+    const [paymentId, setPaymentId] = useState([]);
+
+    const handleOrderId = (id) => {
+        setOrderId(id);
+    };
+    const handlePaymentId = (id) => {
+        setPaymentId(id);
+    };
+
+    useEffect(() => {
+        fetch("https://evening-scrubland-22711.herokuapp.com/products")
+            .then((res) => res.json())
+            .then((data) => {
+                setAllMenu(data);
+            });
+    }, []);
 
     // useEffect(() => {
     //     localStorage.setItem("cart", JSON.stringify(cartItem));
     // }, [cartItem]);
 
     const getMenu = () => {
-        const men = [...menu];
+        const men = [...allMenu];
         return men;
     };
 
-    const setMenuItem = () => {
-        let tempMenu = [];
-        FakeData.map(item => {
-            const singleItem = { ...item };
-            tempMenu = [...tempMenu, singleItem];
-        });
-        setMenu(tempMenu);
-    };
+    // const setMenuItem = () => {
+    //     let tempMenu = [];
+    //     FakeData.map((item) => {
+    //         const singleItem = { ...item };
+    //         tempMenu = [...tempMenu, singleItem];
+    //     });
+    //     setMenu(tempMenu);
+    // };
 
-    useEffect(() => {
-        setMenuItem();
-    }, []);
+    // useEffect(() => {
+    //     setMenuItem();
+    // }, []);
 
     // setting up default menu lunch
     useEffect(() => {
         let temp = [];
-        temp = FakeData.filter(item => item.category === "lunch");
+        temp = allMenu.filter((item) => item.category === "lunch");
         setFiltered(temp);
-    }, []);
+    }, [allMenu]);
 
     // get cart from localStorage
     // useEffect(() => {
@@ -58,21 +75,21 @@ const MenuProvider = props => {
     //     setCartItems(count);
     // }, []);
 
-    const handleCategory = category => {
+    const handleCategory = (category) => {
         let temp = [];
-        temp = FakeData.filter(item => item.category === category);
+        temp = allMenu.filter((item) => item.category === category);
         setFiltered(temp);
     };
 
-    const handleDetails = key => {
+    const handleDetails = (key) => {
         let temp = [];
-        temp = menu.find(item => item.key === key);
+        temp = allMenu.find((item) => item.key === key);
         setDetails(temp);
     };
 
     const handleCart = (key, count) => {
         let tempMenu = getMenu();
-        let tempCart = tempMenu.find(item => item.key === key);
+        let tempCart = tempMenu.find((item) => item.key === key);
         const index = tempMenu.indexOf(tempCart);
         const menu = tempMenu[index];
         menu.count = count;
@@ -86,9 +103,13 @@ const MenuProvider = props => {
         //addToDatabaseCart(key, count);
     };
 
-    const handleIncrement = key => {
+    const emptyCart = () => {
+        setCartItems([]);
+    };
+
+    const handleIncrement = (key) => {
         const cart = [...cartItem];
-        const selected = cart.find(item => item.key === key);
+        const selected = cart.find((item) => item.key === key);
         const index = cart.indexOf(selected);
         const product = cart[index];
         console.log(product);
@@ -115,15 +136,24 @@ const MenuProvider = props => {
                 filterd: filterd,
                 details: details,
                 cart: cartItem,
+                orderId,
+                paymentId,
+                handleOrderId,
+                handlePaymentId,
                 handleCategory: handleCategory,
                 handleDetails: handleDetails,
                 handleCart: handleCart,
-                handleIncrement: handleIncrement
+                handleIncrement: handleIncrement,
+                emptyCart: emptyCart,
             }}
         >
             {props.children}
         </MenuContext.Provider>
     );
+};
+
+export const useMenu = () => {
+    return useContext(MenuContext);
 };
 
 const MenuConsumer = MenuContext.Consumer;

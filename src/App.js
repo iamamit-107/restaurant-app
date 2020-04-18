@@ -10,6 +10,7 @@ import SignUp from "./component/SignUp/SignUp";
 import SignIn from "./component/SignUp/SignIn";
 import CheckOut from "./component/CheckOut/CheckOut";
 import { AuthContextProvider } from "./component/SignUp/Auth";
+import OrderPlaced from "./component/OrderPlaced/OrderPlaced";
 
 function App() {
     return (
@@ -23,6 +24,7 @@ function App() {
                     <Route path="/signup" component={SignUp} />
                     <Route path="/signin" component={SignIn} />
                     <Route path="/checkout" component={CheckOut} />
+                    <Route path="/orderPlaced" component={OrderPlaced} />
                 </Switch>
             </AuthContextProvider>
         </React.Fragment>

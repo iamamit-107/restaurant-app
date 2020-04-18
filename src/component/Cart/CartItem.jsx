@@ -3,7 +3,8 @@ import { MenuContext } from "../../Context";
 
 const CartItem = ({ cart }) => {
     const Menu = useContext(MenuContext);
-    const { img, price, name, count, id } = cart;
+    const { img, price, name, count, key } = cart;
+    console.log(key);
     return (
         <div
             className="d-flex align-items-center my-2 p-2 clear-fix"
@@ -25,7 +26,7 @@ const CartItem = ({ cart }) => {
             {/* <div className="ml-5">
                 <button>-</button>
                 <button> {count} </button>
-                <button onClick={() => Menu.handleIncrement(id)}>+</button>
+                <button onClick={() => Menu.handleIncrement(key)}>+</button>
             </div> */}
         </div>
     );

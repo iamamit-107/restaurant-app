@@ -8,7 +8,7 @@ firebase.initializeApp(firebaseConfig);
 
 const authConctext = createContext();
 
-export const AuthContextProvider = porps => {
+export const AuthContextProvider = (porps) => {
     const auth = Auth();
     return (
         <authConctext.Provider value={auth}>
@@ -24,7 +24,7 @@ export const useAuth = () => {
 const Auth = () => {
     const [user, setUser] = useState([]);
 
-    const getUser = response => {
+    const getUser = (response) => {
         const { email, displayName } = response;
         return { email, displayName };
     };
@@ -33,8 +33,7 @@ const Auth = () => {
         return firebase
             .auth()
             .signInWithEmailAndPassword(email, password)
-            .then(response => {
-                setUser(response.user.displayName);
+            .then((response) => {
                 return response.user;
             });
     };
@@ -42,7 +41,7 @@ const Auth = () => {
     const updateUser = (response, name) => {
         const user = firebase.auth().currentUser;
         user.updateProfile({
-            displayName: name
+            displayName: name,
         }).then(() => {
             const user = getUser(response.user.displayName);
             console.log(user);
@@ -55,11 +54,11 @@ const Auth = () => {
         return firebase
             .auth()
             .createUserWithEmailAndPassword(email, password)
-            .then(response => {
+            .then((response) => {
                 updateUser(response, name);
                 return response.user;
             })
-            .catch(err => {
+            .catch((err) => {
                 console.log(err);
             });
     };
@@ -74,10 +73,10 @@ const Auth = () => {
     };
 
     useEffect(() => {
-        firebase.auth().onAuthStateChanged(function(user) {
+        firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
                 const users = getUser(user);
-                setUser([users.displayName]);
+                setUser({ name: users.displayName, email: users.email });
             } else {
                 // No user is signed in.
                 setUser(null);
@@ -89,7 +88,7 @@ const Auth = () => {
         user,
         signin,
         signout,
-        signup
+        signup,
     };
 };
 

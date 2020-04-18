@@ -10,7 +10,23 @@ const Navbar = () => {
     const auth = useAuth();
     // const name = auth.user[0].displayName;
     // console.log(name);
-    console.log(auth.user);
+    //console.log(auth.user.email);
+
+    //To add data in the mongo db database ==>
+
+    // const addItemHandler = () => {
+    //     const products = FakeData;
+    //     fetch("https://evening-scrubland-22711.herokuapp.com/addUser", {
+    //         method: "POST",
+    //         headers: {
+    //             "Content-type": "application/json; charset=UTF-8",
+    //         },
+    //         body: JSON.stringify(products),
+    //     })
+    //         .then((res) => res.json())
+    //         .then((data) => console.log("post successfull", data));
+    // };
+
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light px-5">
             <Link to="/">
@@ -32,7 +48,7 @@ const Navbar = () => {
                     <li className="nav-item ml-3">
                         {auth.user ? (
                             <MenuConsumer>
-                                {value => (
+                                {(value) => (
                                     <Link className="nav-link" to="/checkout">
                                         <FontAwesomeIcon icon={faCartPlus} />{" "}
                                         <span> {value.cart.length} </span>
@@ -41,7 +57,7 @@ const Navbar = () => {
                             </MenuConsumer>
                         ) : (
                             <MenuConsumer>
-                                {value => (
+                                {(value) => (
                                     <Link className="nav-link" to="/signin">
                                         <FontAwesomeIcon icon={faCartPlus} />{" "}
                                         <span> {value.cart.length} </span>
@@ -67,7 +83,7 @@ const Navbar = () => {
                     </li>
                     <li className="nav-item ml-3">
                         {auth.user ? (
-                            <p className="nav-link">{auth.user[0]}</p>
+                            <p className="nav-link">{auth.user.name}</p>
                         ) : (
                             <p></p>
                         )}
@@ -79,13 +95,18 @@ const Navbar = () => {
                                 background: "red",
                                 borderRadius: "20px",
                                 color: "white",
-                                padding: ""
+                                padding: "",
                             }}
                             to="/signup"
                         >
                             Sign Up
                         </Link>
                     </li>
+                    {/* <li className="nav-item ml-3">
+                        <button className="nav-link" onClick={addItemHandler}>
+                            add item
+                        </button>
+                    </li> */}
                 </ul>
             </div>
         </nav>
